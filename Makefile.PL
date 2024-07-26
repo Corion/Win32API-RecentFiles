@@ -46,6 +46,7 @@ my %module = (
 
     PREREQ_PM => {
         'Exporter'   => 5, # for 'import'
+        'Platform::Windows'   => 0, # but how does this play with my Debian release infrastructure?!
     },
     TEST_REQUIRES => {
         'Test2::API'   => 0,

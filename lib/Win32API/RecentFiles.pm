@@ -1,4 +1,4 @@
-package Win32API::RecentFiles;
+package Win32API::RecentFiles 0.01;
 use 5.020;
 use experimental 'signatures';
 use Exporter 'import';

@@ -47,9 +47,12 @@ my %module = (
     PREREQ_PM => {
         'Exporter'   => 5, # for 'import'
         'Platform::Windows'   => 0, # but how does this play with my Debian release infrastructure?!
+        'Win32'               => 0,
+        'File::Basename'      => 0,
+        'File::Spec'          => 0,
     },
     TEST_REQUIRES => {
-        'Test2::API'   => 0,
+        'Test2::V0'  => 0,
     },
 
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

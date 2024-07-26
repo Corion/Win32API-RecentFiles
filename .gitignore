@@ -3,6 +3,10 @@ Makefile.old
 *.tar.gz
 *.bak
 *.swp
+*.o
+*.c
+*.bs
+*.def
 pm_to_blib
 blib/
 Term-Output-List-*

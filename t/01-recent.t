@@ -1,13 +1,13 @@
 #!perl
 use 5.020;
 use experimental 'signatures';
+use Win32;
+use File::Basename 'dirname';
+use Test2::V0 '-no_srand';
 use File::Spec;
 use utf8;
 
 use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsW';
-use Win32;
-use File::Basename 'dirname';
-use Test2::V0 '-no_srand';
 my $recent = Win32::GetFolderPath(Win32::CSIDL_RECENT());
 
 my $f = File::Spec->rel2abs($0);

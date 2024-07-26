@@ -1,5 +1,8 @@
 Win32API::RecentFiles - recently accessed file API functions on Windows
 
+DESCRIPTION
+
+This module exports the SHAddToRecentDocsA and SHAddToRecentDocsW functions.
 
 
 INSTALLATION
@@ -26,6 +29,9 @@ Should you wish to install this module manually, the procedure is
 
 
 
+SEE ALSO
+
+Microsoft documentation at L<https://learn.microsoft.com/de-de/windows/win32/api/shlobj_core/nf-shlobj_core-shaddtorecentdocs>
 
 
 

@@ -24,6 +24,6 @@ jobs:
       - name: Install Dependencies
         run:  cpanm --installdeps .
       - name: Compile module
-        run: perl -MConfig -E "say $Config{make}; exec $Config{make}"
+        run: perl -MConfig -E "say \$Config{make}; exec \$Config{make}"
       - name: Run Tests
         run: prove -bl t

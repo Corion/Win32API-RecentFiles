@@ -9,17 +9,19 @@ use utf8;
 
 use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsW';
 my $recent = Win32::GetFolderPath(Win32::CSIDL_RECENT());
-note "Recent files are in '$recent'";
+diag "Recent files are in '$recent'";
 
 my $f = File::Spec->rel2abs($0);
 SHAddToRecentDocsA($f);
 my $fn = dirname( $0 );
-ok -f "$recent/$fn.lnk", "$fn was added to recent files";
+ok -f "$recent/$fn.lnk", "$fn was added to recent files"
+    or diag $^E;
 unlink "$recent/$fn.lnk";
 
 $fn = "fände.txt";
 SHAddToRecentDocsW($fn);
 my $fn_ansi = Win32::GetANSIPathName("$recent/$fn.lnk");
-ok -f $fn_ansi, "$fn was added to recent files";
+ok -f $fn_ansi, "$fn was added to recent files"
+    or diag $^E;
 
 done_testing;

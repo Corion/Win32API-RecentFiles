@@ -5,7 +5,7 @@ use Exporter 'import';
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
 
-our @EXPORT_OK = qw(SHAddToRecentDocsA SHAddToRecentDocsW);
+our @EXPORT_OK = qw(SHAddToRecentDocsA SHAddToRecentDocsU SHAddToRecentDocsW);
 
 our $VERSION = '0.01';
 
@@ -20,16 +20,40 @@ Win32API::RecentFiles - recently accessed file API functions on Windows
 
 =head1 SYNOPSIS
 
-  use Win32API::RecentFiles qw(SHAddToRecentDocsA SHAddToRecentDocsW);
+  use Win32API::RecentFiles qw(SHAddToRecentDocsA SHAddToRecentDocsW SHAddToRecentDocsU);
   use Win32;
+  use Encode 'encode';
   SHAddToRecentDocsA('C:\\Full\\Path\\To\\Makefile.PL');
-  SHAddToRecentDocsW('C:\\Full\\Path\\To\\fünf.txt');
+  SHAddToRecentDocsW(encode('UTF-16', 'C:\\Full\\Path\\To\\Motörhead.mp3'));
+  SHAddToRecentDocsU('C:\\Full\\Path\\To\\fünf.txt');
   my $recent_dir = Win32::GetFolderPath(Win32::CSIDL_RECENT());
   # $recent_dir\\fünf.txt.lnk exists
 
 =head1 DESCRIPTION
 
-This module exports the SHAddToRecentDocsA and SHAddToRecentDocsW functions.
+This module exports the C<SHAddToRecentDocsA>
+C<SHAddToRecentDocsU> and C<SHAddToRecentDocsW> functions.
+
+=head1 FUNCTIONS
+
+=head2 C<SHAddToRecentDocsA>
+
+  SHAddToRecentDocsA('C:\\Full\\Path\\To\\Makefile.PL');
+  
+Adds the filename to the list of recently accessed documents.
+C<$filename> must be an ANSI string encoded in the local code page.
+
+=head2 C<SHAddToRecentDocsU>
+
+  SHAddToRecentDocsU('C:\\Full\\Path\\To\\Makefile.PL');
+
+C<$filename> must be a Unicode string encoded as UTF-8.
+
+=head2 C<SHAddToRecentDocsW>
+
+  SHAddToRecentDocsW('C\0:\0\\\0...');
+
+C<$filename> must be a Unicode string encoded as UTF-16.
 
 =head1 SEE ALSO
 

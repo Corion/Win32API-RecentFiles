@@ -12,7 +12,7 @@ void SHAddToRecentDocsA(const char* path) {
     );
 }
 
-void SHAddToRecentDocsW(SV* _path) {
+void SHAddToRecentDocsU(SV* _path) {
     STRLEN len;
     char* s = SvPVutf8(_path, len);
     STRLEN length = MultiByteToWideChar(CP_UTF8, 0, s, len, 0, 0);
@@ -33,6 +33,17 @@ void SHAddToRecentDocsW(SV* _path) {
     
     Safefree(path);
 }
+
+void SHAddToRecentDocsW(SV* _path) {
+    STRLEN len;
+    wchar_t* path = SvPVbyte(_path, len);
+
+    SHAddToRecentDocs(
+        SHARD_PATHW,
+        path
+    );
+}
+
 
 MODULE = Win32API::RecentFiles  PACKAGE = Win32API::RecentFiles  
 
@@ -56,13 +67,29 @@ SHAddToRecentDocsA (path)
         return; /* assume stack size is correct */
 
 void
-SHAddToRecentDocsW (_path)
+SHAddToRecentDocsW (path)
+	const char *	path
+        PREINIT:
+        I32* temp;
+        PPCODE:
+        temp = PL_markstack_ptr++;
+        SHAddToRecentDocsW(path);
+        if (PL_markstack_ptr != temp) {
+          /* truly void, because dXSARGS not invoked */
+          PL_markstack_ptr = temp;
+          XSRETURN_EMPTY; /* return empty stack */
+        }
+        /* must have used dXSARGS; list context implied */
+        return; /* assume stack size is correct */
+
+void
+SHAddToRecentDocsU (_path)
 	SV *	_path
         PREINIT:
         I32* temp;
         PPCODE:
         temp = PL_markstack_ptr++;
-        SHAddToRecentDocsW(_path);
+        SHAddToRecentDocsU(_path);
         if (PL_markstack_ptr != temp) {
           /* truly void, because dXSARGS not invoked */
           PL_markstack_ptr = temp;

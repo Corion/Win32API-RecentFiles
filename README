@@ -2,7 +2,8 @@ Win32API::RecentFiles - recently accessed file API functions on Windows
 
 DESCRIPTION
 
-This module exports the SHAddToRecentDocsA and SHAddToRecentDocsW functions.
+This module exports the C<SHAddToRecentDocsA>
+C<SHAddToRecentDocsU> and C<SHAddToRecentDocsW> functions.
 
 
 INSTALLATION

@@ -5,6 +5,8 @@ DESCRIPTION
 This module exports the C<SHAddToRecentDocsA>
 C<SHAddToRecentDocsU> and C<SHAddToRecentDocsW> functions.
 
+This document describes version 0.01.
+
 
 INSTALLATION
 

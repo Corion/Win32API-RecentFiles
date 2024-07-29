@@ -10,8 +10,8 @@ Makefile.old
 *.old
 pm_to_blib
 blib/
-Term-Output-List-*
-Term-Output-List-*/
+Win32API-RecentFiles-*
+Win32API-RecentFiles-*/
 .releaserc
 cover_db
 MYMETA.*

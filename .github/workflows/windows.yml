@@ -47,7 +47,7 @@ jobs:
       - name: Set up Cygwin
         uses: cygwin/cygwin-install-action@master
         with:
-            packages: perl_base perl-ExtUtils-MakeMaker make gcc-g++ bash libcrypt-devel libcrypt0
+            packages: perl_base perl-ExtUtils-MakeMaker make gcc-g++ bash libcrypt-devel libcrypt0 libnsl
 
       - uses: actions/checkout@main
         with:

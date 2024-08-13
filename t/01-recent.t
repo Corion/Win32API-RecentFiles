@@ -47,6 +47,7 @@ my $fn = basename( $0 );
 my $recent_entry = "$recent\\$fn.lnk";
 unlink $recent_entry;
 my $f = File::Spec->rel2abs($0);
+$f =~ s!/!\\!g; # hack for Cygwin
 SHAddToRecentDocsA($f);
 if(! ok wait_for_file( $recent_entry ), "$recent_entry was added to recent files") {
     dump_recent;
@@ -58,7 +59,8 @@ $recent_entry = "$recent\\$fn.lnk";
 my $fn_wide = encode('UTF16-LE', File::Spec->rel2abs( $fn ));
 note sprintf "%vX", $fn_wide;
 unlink_file( $recent_entry );
-SHAddToRecentDocsW("$fn_wide\0");
+$f =~ s!/!\\!g; # hack for Cygwin
+SHAddToRecentDocsW($fn_wide);
 
 if( !ok wait_for_file( $recent_entry ), "$fn was added to recent files (as Wide string)") {
     diag $^E;
@@ -70,7 +72,9 @@ $fn = "fände.txt";
 $recent_entry = "$recent\\$fn.lnk";
 my $fn_ansi = Win32::GetANSIPathName($recent_entry);
 unlink_file( $recent_entry );
-SHAddToRecentDocsU(File::Spec->rel2abs($fn));
+my $add = File::Spec->rel2abs($fn);
+$add =~ s!/!\\!g; # hack for Cygwin
+SHAddToRecentDocsU($add);
 
 if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as Unicode-string)") {
     diag $^E;

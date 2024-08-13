@@ -5,7 +5,9 @@
 
 #include "shlobj.h"
 
-void SHAddToRecentDocsA(const char* path) {
+void SHAddToRecentDocsA(SV* _path) {
+    STRLEN len;
+    const char * path = SvPVbyte(_path, len);
     SHAddToRecentDocs(
         SHARD_PATHA,
         path
@@ -20,17 +22,17 @@ void SHAddToRecentDocsU(SV* _path) {
     //printf("length: %d\n", length);
     wchar_t* path;
     Newx(path, len+1, wchar_t);
-    
+
     if( path ) {
         MultiByteToWideChar(CP_UTF8, 0, s, len, path, length);
-        path[length] = L'\0';    
+        path[length] = L'\0';
     }
-    
+
     SHAddToRecentDocs(
         SHARD_PATHW,
         path
     );
-    
+
     Safefree(path);
 }
 
@@ -45,14 +47,14 @@ void SHAddToRecentDocsW(SV* _path) {
 }
 
 
-MODULE = Win32API::RecentFiles  PACKAGE = Win32API::RecentFiles  
+MODULE = Win32API::RecentFiles  PACKAGE = Win32API::RecentFiles
 
 PROTOTYPES: DISABLE
 
 
 void
 SHAddToRecentDocsA (path)
-	const char *	path
+	SV *	path
         PREINIT:
         I32* temp;
         PPCODE:
@@ -68,7 +70,7 @@ SHAddToRecentDocsA (path)
 
 void
 SHAddToRecentDocsW (path)
-	const char *	path
+	SV * path
         PREINIT:
         I32* temp;
         PPCODE:

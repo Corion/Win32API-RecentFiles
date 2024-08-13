@@ -42,16 +42,16 @@ ok wait_for_file( $recent_entry ), "$recent_entry was added to recent files";
     };
     diag "---";
 }
-
 unlink $recent_entry or warn $^E, $!;
 
 $fn = "fände.txt";
 $recent_entry = "$recent\\$fn.lnk";
-my $fn_ansi = Win32::GetANSIPathName($recent_entry);
+my $fn_wide = encode('UTF16-LE', $recent_entry );
 unlink_file( $recent_entry );
-SHAddToRecentDocsU(File::Spec->rel2abs($fn));
+SHAddToRecentDocsW($fn_wide);
 
-if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as Unicode-string)") {
+wait_for_file( $recent_entry );
+if( !ok -f $fn_wide, "$fn was added to recent files (as Wide string)") {
     diag $^E;
     opendir my $dh, $recent
         or diag "$^E while reading $recent";
@@ -66,12 +66,11 @@ unlink_file( $recent_entry );
 
 $fn = "fände.txt";
 $recent_entry = "$recent\\$fn.lnk";
-my $fn_wide = encode('UTF16-LE', $recent_entry );
+my $fn_ansi = Win32::GetANSIPathName($recent_entry);
 unlink_file( $recent_entry );
-SHAddToRecentDocsW($fn_wide);
+SHAddToRecentDocsU(File::Spec->rel2abs($fn));
 
-wait_for_file( $recent_entry );
-if( !ok -f $fn_wide, "$fn was added to recent files (as Wide string)") {
+if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as Unicode-string)") {
     diag $^E;
     opendir my $dh, $recent
         or diag "$^E while reading $recent";

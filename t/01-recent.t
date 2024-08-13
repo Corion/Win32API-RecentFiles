@@ -22,7 +22,7 @@ sub wait_for_file( $filename, $wait=3 ) {
           and time < $timeout ) {
         sleep 0.1;
     }
-    return -f $fn;
+    return -f $fn || -f $plain_fn;
 }
 
 sub unlink_file( $filename ) {

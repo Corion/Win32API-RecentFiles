@@ -58,7 +58,9 @@ if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as 
     diag "Recent entries:";
     for my $entry (readdir $dh) {
         diag $entry;
+        diag sprintf "%vX", $entry;
     };
+    diag "---";
 };
 unlink_file( $recent_entry );
 
@@ -76,7 +78,9 @@ if( !ok -f $fn_wide, "$fn was added to recent files (as Wide string)") {
     diag "Recent entries:";
     for my $entry (readdir $dh) {
         diag $entry;
+        diag sprintf "%vX", $entry;
     };
+    diag "---";
 };
 unlink_file( $recent_entry );
 

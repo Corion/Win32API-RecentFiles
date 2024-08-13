@@ -38,7 +38,7 @@ jobs:
       - run: perl Makefile.PL
       - run: gmake
       - name: Run Tests
-        run: prove -wlvmb t
+        run: prove -vbl t
 
   cygwin:
     runs-on: windows-latest

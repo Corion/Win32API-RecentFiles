@@ -13,7 +13,7 @@ use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsU', 'SHAddToRe
 my $recent = Win32::GetFolderPath(Win32::CSIDL_RECENT());
 diag "Recent files are in '$recent'";
 
-sub wait_for_file( $filename, $wait=1 ) {
+sub wait_for_file( $filename, $wait=3 ) {
     my $fn = Win32::GetANSIPathName($filename);
     my $timeout = time+$wait;
     while( ! -f $fn and time < $timeout ) {

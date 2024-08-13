@@ -15,8 +15,11 @@ diag "Recent files are in '$recent'";
 
 sub wait_for_file( $filename, $wait=3 ) {
     my $fn = Win32::GetANSIPathName($filename);
+    (my $plain_fn = $fn) =~ s/\.txt\././;
     my $timeout = time+$wait;
-    while( ! -f $fn and time < $timeout ) {
+    while(    ! -f $fn
+          and ! -f $plain_fn
+          and time < $timeout ) {
         sleep 0.1;
     }
     return -f $fn;
@@ -24,7 +27,9 @@ sub wait_for_file( $filename, $wait=3 ) {
 
 sub unlink_file( $filename ) {
     my $fn = Win32::GetANSIPathName($filename);
+    (my $plain_fn = $fn) =~ s/\.txt\././;
     unlink $fn;
+    unlink $plain_fn;
 }
 
 sub dump_recent( $dir=$recent ) {
@@ -51,7 +56,7 @@ unlink $recent_entry or warn $^E, $!;
 $fn = "Ümloud.txt";
 $recent_entry = "$recent\\$fn.lnk";
 my $fn_wide = encode('UTF16-LE', File::Spec->rel2abs( $fn ));
-note sprintf "%vX", $fn_wide;   
+note sprintf "%vX", $fn_wide;
 unlink_file( $recent_entry );
 SHAddToRecentDocsW("$fn_wide\0");
 

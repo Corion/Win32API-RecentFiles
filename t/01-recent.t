@@ -9,7 +9,7 @@ use utf8;
 use Time::HiRes 'sleep';
 use Encode 'encode';
 
-use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsU';
+use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsU', 'SHAddToRecentDocsW';
 my $recent = Win32::GetFolderPath(Win32::CSIDL_RECENT());
 diag "Recent files are in '$recent'";
 

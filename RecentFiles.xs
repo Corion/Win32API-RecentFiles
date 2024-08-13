@@ -18,8 +18,6 @@ void SHAddToRecentDocsU(SV* _path) {
     STRLEN len;
     char* s = SvPVutf8(_path, len);
     STRLEN length = MultiByteToWideChar(CP_UTF8, 0, s, len, 0, 0);
-    //printf("len:    %d\n", len);
-    //printf("length: %d\n", length);
     wchar_t* path;
     Newx(path, len+1, wchar_t);
 
@@ -38,12 +36,19 @@ void SHAddToRecentDocsU(SV* _path) {
 
 void SHAddToRecentDocsW(SV* _path) {
     STRLEN len;
-    wchar_t* path = SvPVbyte(_path, len);
+    const char * bytes = SvPVbyte(_path, len);
+    wchar_t * path;
+    unsigned char *p;
+    Newx(path, len+2, char);
+    memcpy( path, bytes, len );
+    // add a \0 to the end of path
+    path[ len/2 ] = 0;
 
     SHAddToRecentDocs(
         SHARD_PATHW,
         path
     );
+    Safefree( path );
 }
 
 

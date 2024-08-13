@@ -27,32 +27,7 @@ sub unlink_file( $filename ) {
     unlink $fn;
 }
 
-my $fn = basename( $0 );
-my $recent_entry = "$recent\\$fn.lnk";
-unlink $recent_entry;
-my $f = File::Spec->rel2abs($0);
-SHAddToRecentDocsA($f);
-ok wait_for_file( $recent_entry ), "$recent_entry was added to recent files";
-{
-    opendir my $dh, $recent
-        or diag "$^E while reading $recent";
-    diag "Recent entries:";
-    for my $entry (readdir $dh) {
-        diag $entry;
-    };
-    diag "---";
-}
-unlink $recent_entry or warn $^E, $!;
-
-$fn = "fände.txt";
-$recent_entry = "$recent\\$fn.lnk";
-my $fn_wide = encode('UTF16-LE', $recent_entry );
-unlink_file( $recent_entry );
-SHAddToRecentDocsW($fn_wide);
-
-wait_for_file( $recent_entry );
-if( !ok -f $fn_wide, "$fn was added to recent files (as Wide string)") {
-    diag $^E;
+sub dump_recent( $dir=$recent ) {
     opendir my $dh, $recent
         or diag "$^E while reading $recent";
     diag "Recent entries:";
@@ -61,6 +36,28 @@ if( !ok -f $fn_wide, "$fn was added to recent files (as Wide string)") {
         diag sprintf "%vX", $entry;
     };
     diag "---";
+}
+
+my $fn = basename( $0 );
+my $recent_entry = "$recent\\$fn.lnk";
+unlink $recent_entry;
+my $f = File::Spec->rel2abs($0);
+SHAddToRecentDocsA($f);
+if(! ok wait_for_file( $recent_entry ), "$recent_entry was added to recent files") {
+    dump_recent;
+};
+unlink $recent_entry or warn $^E, $!;
+
+$fn = "Ümloud.txt";
+$recent_entry = "$recent\\$fn.lnk";
+my $fn_wide = encode('UTF16-LE', File::Spec->rel2abs( $fn ));
+note sprintf "%vX", $fn_wide;   
+unlink_file( $recent_entry );
+SHAddToRecentDocsW("$fn_wide\0");
+
+if( !ok wait_for_file( $recent_entry ), "$fn was added to recent files (as Wide string)") {
+    diag $^E;
+    dump_recent;
 };
 unlink_file( $recent_entry );
 
@@ -72,14 +69,7 @@ SHAddToRecentDocsU(File::Spec->rel2abs($fn));
 
 if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as Unicode-string)") {
     diag $^E;
-    opendir my $dh, $recent
-        or diag "$^E while reading $recent";
-    diag "Recent entries:";
-    for my $entry (readdir $dh) {
-        diag $entry;
-        diag sprintf "%vX", $entry;
-    };
-    diag "---";
+    dump_recent();
 };
 unlink_file( $recent_entry );
 

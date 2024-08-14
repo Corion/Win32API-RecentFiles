@@ -4,6 +4,7 @@ use experimental 'signatures';
 use Win32;
 use File::Basename 'basename';
 use Test2::V0 '-no_srand';
+use File::Spec;
 use utf8;
 use Time::HiRes 'sleep';
 use Encode 'encode';
@@ -59,6 +60,7 @@ $recent_entry = "$recent\\$fn.lnk";
 my $fn_wide = encode('UTF16-LE', $fn );
 note sprintf "%vX", $fn_wide;
 unlink_file( $recent_entry );
+$f =~ s!/!\\!g; # hack for Cygwin
 SHAddToRecentDocsW($fn_wide);
 
 if( !ok wait_for_file( $recent_entry ), "$fn was added to recent files (as Wide string)") {
@@ -71,7 +73,9 @@ $fn = "fände.txt";
 $recent_entry = "$recent\\$fn.lnk";
 my $fn_ansi = Win32::GetANSIPathName($recent_entry);
 unlink_file( $recent_entry );
-SHAddToRecentDocsU($fn);
+my $add = File::Spec->rel2abs($fn);
+$add =~ s!/!\\!g; # hack for Cygwin
+SHAddToRecentDocsU($add);
 
 if( !ok wait_for_file( $recent_entry ), "$fn_ansi was added to recent files (as Unicode-string)") {
     diag $^E;

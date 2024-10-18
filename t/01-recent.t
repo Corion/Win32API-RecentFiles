@@ -2,6 +2,8 @@
 use 5.020;
 use experimental 'signatures';
 use Win32;
+my %Registry;
+use Win32::TieRegistry ( TiedHash => \%Registry );
 use File::Basename 'basename';
 use Test2::V0 '-no_srand';
 use File::Spec;
@@ -12,6 +14,20 @@ use Encode 'encode';
 use Win32API::RecentFiles 'SHAddToRecentDocsA', 'SHAddToRecentDocsU', 'SHAddToRecentDocsW';
 my $recent = Win32::GetFolderPath(Win32::CSIDL_RECENT());
 diag "Recent files are in '$recent'";
+
+my $testcount = 3;
+plan $testcount;
+
+# Now, check whether Explorer (and its APIs) even show+create recent documents
+# Skip the test if they don't
+my $recentdocs = 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs\\';
+my $rd = $Registry{$recentdocs};
+if( $rd and not $rd->%* ) {
+	SKIP: {
+		skip "No recent documents found in '$recentdocs'", $testcount;
+	};
+	exit
+};
 
 my $is_cygwin = $^O eq 'cygwin';
 
